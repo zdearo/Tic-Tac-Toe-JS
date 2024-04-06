@@ -13,10 +13,6 @@ main{
   height: 100vh;
 }
 
-.table{
-  
-}
-
 .table .row{
   display: flex;
   justify-content: center;
@@ -26,44 +22,69 @@ main{
 .table .row .square{
   width: 13vw;
   height: 13vw;
-  border: 1px solid rgb(255, 255, 255);
+  background-color: rgb(34, 45, 61);
+  margin: 10px;
+  border-radius: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .circle{
-  width: 10vw;
-  height: 10vw;
+  width: 60%;
+  height: 60%;
   border-radius: 50%;
-  border: 5px solid red;
+  border: 15px solid red;
 }
 
 .cross{
-  width: 10vw;
-  height: 10vw;
+  width: 60%;
+  height: 60%;
   position: relative;
-
+  &:after, &:before{
+    content: '';
+    width: 10vw;
+    height: 15px;
+    border-radius: 20px;
+    background-color: blue;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    
+  }
+  &:before{
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+  &:after{
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
 }
 
-.cross::after{
-  content: '';
-  width: 10vw;
-  height: 5px;
-  background-color: blue;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(45deg);
+@media (max-width: 768px){
+  .table .row .square{
+    width: 25vw;
+    height: 25vw;
+    margin: 10px;
+  }
+
+  .cross, .circle{
+    width: 60%;
+    height: 60%;
+  }
+
+  .cross:after, .cross:before{
+    width: 20vw;
+    height: 5px;
+  }
+
+  .circle{
+    border: 5px solid red;
+  }
 }
 
-.cross::before{
-  content: '';
-  width: 10vw;
-  height: 5px;
-  background-color: blue;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-45deg);
+@media (max-width: 275px){
+  .table .row .square{
+    margin: 3px;
+    border-radius: 6px;
+  }
 }
