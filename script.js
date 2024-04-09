@@ -1,14 +1,16 @@
 const table = document.querySelectorAll('.square');
 const history = [];
+const historyList = document.getElementById('history');
 let moveNumber = 0;
 let currentPlayer = 'cross';
 let currentPlayerDisplay = document.getElementById('current-player');
+
 
 table.forEach((square, i) => {
   square.addEventListener('click', () => {
       if (table[i].innerHTML === '') {
         addMove(i);
-        history.push(table[i]);
+        addHistory(i);
         verifyVictory();
         alterPlayer();
       }
@@ -19,7 +21,7 @@ function addMove(index) {
   const move = document.createElement('div');
   move.classList.add(currentPlayer);
   table[index].appendChild(move);
-  moveNumber++
+  moveNumber++;
 }
 
 function alterPlayer() {
@@ -45,8 +47,17 @@ function verifyVictory(){
         alert(`Player ${currentPlayer === 'cross' ? 'Circle' : 'Cross'} wins!`);
         resetGame();
       }, 100);
+    }else if (moveNumber >= 7) {
+      table[history[moveNumber - 6].position].innerHTML = '';
     }
   });
+}
+
+function addHistory(position) {
+  history.push({ moveNumber: moveNumber, player: currentPlayer, position: position });
+  const historyItem = document.createElement('li');
+  historyItem.innerHTML = `Move ${moveNumber}: ${currentPlayer === 'cross' ? 'X' : 'O'} at position ${position}`;
+  historyList.appendChild(historyItem);
 }
 
 function resetGame() {
@@ -59,4 +70,5 @@ function resetGame() {
   currentPlayer = 'cross';
   currentPlayerDisplay.innerHTML = 'X';
   currentPlayerDisplay.style.color = '#0000ff';
+  historyList.innerHTML = '';
 }

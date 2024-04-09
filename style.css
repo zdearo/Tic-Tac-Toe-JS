@@ -34,7 +34,7 @@ header .text{
   justify-content: flex-start;
   align-items: flex-start;
 }
-header .text p{
+header .text ul li{
   font-size: 1em;
   margin: 3px;
   &::before{
