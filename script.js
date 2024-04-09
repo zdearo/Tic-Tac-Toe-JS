@@ -5,36 +5,35 @@ let moveNumber = 0;
 let currentPlayer = 'cross';
 let currentPlayerDisplay = document.getElementById('current-player');
 
-
 table.forEach((square, i) => {
   square.addEventListener('click', () => {
-    // Se a casa estiver vazia, adiciona a jogada
-      if (table[i].innerHTML === '') {
-        addMove(i)
-        addHistory(i);
-        verifyVictory()
-        alterPlayer();
-      }
+    if (table[i].innerHTML === '') {
+      addMove(i);
+      addHistory(i);
+      verifyVictory();
+      alterPlayer();
+    }
   });
 });
 
-// Adiciona a jogada na tabela
-async function addMove(index) {
+// Adiona um movimento na tabela e incrementa o número de movimentos
+function addMove(index) {
   const move = document.createElement('div');
   move.classList.add(currentPlayer);
   table[index].appendChild(move);
   moveNumber++;
 }
 
-// Alterna o jogador atual
+// Alterna o jogador atual entre 'cross' e 'circle' e atualiza o display
 function alterPlayer() {
   currentPlayer = currentPlayer === 'cross' ? 'circle' : 'cross';
   currentPlayerDisplay.innerHTML = currentPlayer === 'cross' ? 'X' : 'O';
   currentPlayerDisplay.style.color = currentPlayer === 'cross' ? '#0000ff' : '#ff0000';
 }
 
-// Verifica se houve vitória
-async function verifyVictory(){
+// Verifica se houve vitória de um dos jogadores e exibe um alerta com o vencedor, 
+// caso não haja vitória, remove o último movimento após 7 movimentos
+function verifyVictory() {
   const winningCombos = [
     [0, 1, 2], [3, 4, 5], [6, 7, 8],
     [0, 3, 6], [1, 4, 7], [2, 5, 8],
@@ -43,15 +42,11 @@ async function verifyVictory(){
 
   let victoryFound = false;
 
-  // Itera sobre os combos vencedores e verifica se algum foi completado
   winningCombos.forEach(combo => {
     const [a, b, c] = combo;
 
-    //Se o combo foi completado, pinta os quadrados e exibe o alerta de vitória
     if (table[a].innerHTML && table[a].innerHTML === table[b].innerHTML && table[a].innerHTML === table[c].innerHTML) {
-      table[a].style.backgroundColor = '#4a6d42';
-      table[b].style.backgroundColor = '#4a6d42';
-      table[c].style.backgroundColor = '#4a6d42';
+      [a, b, c].forEach(i => table[i].style.backgroundColor = '#4a6d42');
       let winningPlayer = currentPlayer;
       setTimeout(() => {
         alert(`Player ${winningPlayer} wins!`);
@@ -61,16 +56,14 @@ async function verifyVictory(){
     }
   });
 
-  // Se não houve vencedor e o jogo está no 9º movimento, apaga a jogada mais antiga
   if (!victoryFound && moveNumber >= 7) {
-    console.log('moveNumber', moveNumber);
     table[history[moveNumber - 7].position].innerHTML = '';
   }
 }
 
-// Adiciona a jogada no histórico
+// Adiciona um item ao histórico de jogadas e exibe na tela o movimento realizado
 function addHistory(position) {
-  history.push({ moveNumber: moveNumber, player: currentPlayer, position: position });
+  history.push({ moveNumber, player: currentPlayer, position });
   const historyItem = document.createElement('li');
   historyItem.innerHTML = `Move ${moveNumber}: ${currentPlayer === 'cross' ? 'X' : 'O'} at position ${position}`;
   historyList.appendChild(historyItem);
